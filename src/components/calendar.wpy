@@ -1,0 +1,202 @@
+<style lang="less">
+.time_tit {
+    border-bottom: 2rpx solid #dadada;
+    background: #ededed;
+    position: relative;
+    display: flex;
+}
+
+.time_s {
+    padding: 20rpx;
+    color: red;
+    font-size: 44rpx;
+    text-align: left;
+}
+
+.time_tit text {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0 30rpx;
+    font-size: 32rpx;
+    color: #17a8e2;
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: justify;
+}
+
+.time_con picker-view {
+    padding: 0 6%;
+    box-sizing: border-box;
+}
+
+.date_type {
+    text-align: left;
+    padding: 20rpx 20rpx 20rpx 6%;
+}
+
+.date_type label {
+    display: inline-block;
+    font-size: 28rpx;
+    padding: 11rpx 17rpx;
+    color: #c91723;
+    border: 1px solid #c91723;
+    vertical-align: top;
+}
+
+.date_type label:first-child {
+    border-top-left-radius: 6rpx;
+    border-bottom-left-radius: 6rpx;
+}
+
+.date_type label:last-child {
+    border-top-right-radius: 6rpx;
+    border-bottom-right-radius: 6rpx;
+}
+
+.date_type label.on {
+    background-color: #c91723;
+    color: #fff;
+}
+
+.checkbox {
+    font-size: 32rpx;
+}
+
+.checkbox label {
+    padding: 28rpx 0;
+    display: inline-block;
+}
+
+.checkbox checkbox {
+    vertical-align: top;
+}
+
+.checkbox .wx-checkbox-input {
+    width: 28rpx;
+    height: 28rpx;
+}
+
+.show {
+    transform: translateY(0%);
+    transition: all .3s;
+}
+
+.hide {
+    display: none;
+}
+</style>
+<template>
+<view>
+    <view class="time_tit dis_flex">
+        <view class="date_type">
+            <radio-group bindchange="dateType" class="radio-group">
+                <label class="radio {{item.value==dataTypeIndex?'on':''}}" wx:for="{{date_type_array}}" wx:for-index="idx" wx:key="idx">
+                    <radio hidden value="{{item.value}}"></radio>{{item.name}}</label>
+            </radio-group>
+        </view>
+        <view class="checkbox {{dataTypeIndex==1?'hide':''}}">
+            <checkbox-group bindchange="checkRyue">
+                <label>
+                    <checkbox checked="{{isLeapIndex==1?'true':''}}" value="{{isLeapIndex}}"></checkbox>
+                    <icon></icon>闰月</label>
+            </checkbox-group>
+        </view>
+        <text bindtap="timeClose">确定</text>
+    </view>
+    <view class="time_con">
+        <picker-view bindchange="bindChange" indicatorStyle="height: 50px;" style="width: 100%; height: 400rpx;" value="{{value}}">
+            <picker-view-column>
+                <view style="line-height: 50px" wx:for="{{years}}" wx:key="index">{{item}}年</view>
+            </picker-view-column>
+            <picker-view-column>
+                <view style="line-height: 50px" wx:for="{{months}}" wx:key="index">{{item}}月</view>
+            </picker-view-column>
+            <picker-view-column>
+                <view style="line-height: 50px" wx:for="{{days}}" wx:key="index">{{item}}日</view>
+            </picker-view-column>
+            <picker-view-column>
+                <view style="line-height: 50px" wx:for="{{hours}}" wx:key="index">{{item}}时</view>
+            </picker-view-column>
+            <picker-view-column>
+                <view style="line-height: 50px" wx:for="{{minutes}}" wx:key="index">{{item}}分</view>
+            </picker-view-column>
+        </picker-view>
+    </view>
+</view>
+
+</template>
+<script>
+  import wepy from 'wepy'
+  let curTime = new Date()
+  let curYear = curTime.getFullYear()
+  let curMonth = curTime.getMonth() + 1
+  let curDay = curTime.getDate()
+  let curHour = curTime.getHours()
+  let curMinutes = curTime.getMinutes()
+  let years = []
+  let months = []
+  let days = []
+  let hours = []
+  let minutes = []
+  for (let i = 1900; i <= curYear + 2; i++) {
+    years.push(i)
+  }
+  for (let i = 1; i <= 12; i++) {
+    let num = i.toString().padStart(2, '0')
+    months.push(num)
+  }
+  for (let i = 1; i <= 31; i++) {
+    let num = i.toString().padStart(2, '0')
+    days.push(num)
+  }
+  for (let i = 1; i <= 24; i++) {
+    let num = i.toString().padStart(2, '0')
+    hours.push(num)
+  }
+  for (let i = 1; i <= 59; i++) {
+    let num = i.toString().padStart(2, '0')
+    minutes.push(num)
+  }
+  export default class Calendar extends wepy.component {
+    props = {
+      date: {
+        type: String,
+        default: '请选择出生时间',
+        twoWay: true
+      }
+    }
+
+    data = {
+      years,
+      months,
+      days,
+      hours,
+      minutes,
+      date_type_array: [
+        {
+          name: "公历",
+          value: 1
+        },
+        {
+          name: "农历",
+          value: 2
+        }
+      ]
+    }
+    events = {
+    }
+
+    watch = {
+    }
+
+    methods = {
+      bindChange (e) {
+        console.log(e)
+        let valArr = e.detail.value
+        this.date = `${this.years[valArr[0]]}-${this.months[valArr[1]]}-${this.days[valArr[2]]} ${this.hours[valArr[3]]}:${this.minutes[valArr[4]]}`
+      }
+    }
+  }
+</script>

@@ -1,0 +1,92 @@
+<style lang="less">
+@import "../../styles/variable.less";
+.page {
+  &-swiper {
+    width: 100%;
+    height: 350rpx;
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  &-submit {
+    width: 670rpx;
+    height: 80rpx;
+    background: @primary-color;
+    color: #fff;
+    border-radius: 5rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 32rpx;
+  }
+}
+
+</style>
+<template>
+  <view class="page">
+    <!-- 轮播图 -->
+    <swiper class="page-swiper" indicator-dots="{{indicatorDots}}"
+      autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+      <block wx:for="{{imgUrls}}">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image"/>
+        </swiper-item>
+      </block>
+    </swiper>
+    <text>已为100000+人提供服务</text>
+    <view class="page-form">
+      <view class="page-form-box">
+        <text>姓氏</text>
+        <input type="text" />
+      </view>
+      <view class="page-form-box">
+        <text>出生时间</text>
+        <text>请选择出生时间</text>
+      </view>
+      <view class="page-form-box">
+        <text>出生地点</text>
+        <text>{{date}}</text>
+      </view>
+    </view>
+    <button class="page-submit">立即起名</button>
+    <calendar :date="date"></calendar>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import calendar from '@/components/calendar'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    }
+    components = {
+      calendar
+    }
+
+    data = {
+      date: '请选择出生时间',
+      imgUrls: [
+        'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+        'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
+        'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
+      ],
+      indicatorDots: false,
+      autoplay: false,
+      interval: 5000,
+      duration: 1000
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    events = {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

@@ -1,0 +1,15 @@
+{
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wxf5f282f78fffa1ec",
+	"projectname": "qiming",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

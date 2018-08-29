@@ -1,4 +1,12 @@
 <style lang="less">
+@import "../styles/variable.less";
+.calendar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
 .time_tit {
     border-bottom: 2rpx solid #dadada;
     background: #ededed;
@@ -40,8 +48,8 @@
     display: inline-block;
     font-size: 28rpx;
     padding: 11rpx 17rpx;
-    color: #c91723;
-    border: 1px solid #c91723;
+    color: @primary-color;
+    border: 1px solid @primary-color;
     vertical-align: top;
 }
 
@@ -56,7 +64,7 @@
 }
 
 .date_type label.on {
-    background-color: #c91723;
+    background-color: @primary-color;
     color: #fff;
 }
 
@@ -88,25 +96,31 @@
 }
 </style>
 <template>
-<view>
+<view class="calendar" wx:if="{{isShow}}">
     <view class="time_tit dis_flex">
         <view class="date_type">
-            <radio-group bindchange="dateType" class="radio-group">
-                <label class="radio {{item.value==dataTypeIndex?'on':''}}" wx:for="{{date_type_array}}" wx:for-index="idx" wx:key="idx">
-                    <radio hidden value="{{item.value}}"></radio>{{item.name}}</label>
+            <radio-group bindchange="changeDateType" class="radio-group">
+                <label class="radio {{item.value === dataTypeIndex ? 'on' : ''}}"
+                  wx:for="{{date_type_array}}"
+                  wx:for-index="idx"
+                  wx:key="idx"
+                  wx:for-item="item">
+                    <radio hidden value="{{item.value}}"></radio>{{item.name}}
+                  </label>
             </radio-group>
         </view>
-        <view class="checkbox {{dataTypeIndex==1?'hide':''}}">
+        <!-- <view class="checkbox {{dataTypeIndex==1?'hide':''}}">
             <checkbox-group bindchange="checkRyue">
                 <label>
                     <checkbox checked="{{isLeapIndex==1?'true':''}}" value="{{isLeapIndex}}"></checkbox>
-                    <icon></icon>闰月</label>
+                    <icon></icon>闰月
+                </label>
             </checkbox-group>
-        </view>
-        <text bindtap="timeClose">确定</text>
+        </view> -->
+        <text @tap="close">确定</text>
     </view>
     <view class="time_con">
-        <picker-view bindchange="bindChange" indicatorStyle="height: 50px;" style="width: 100%; height: 400rpx;" value="{{value}}">
+        <picker-view bindchange="bindChange" indicatorStyle="height: 50px;" style="width: 100%; height: 400rpx;background: #fff;" value="{{value}}">
             <picker-view-column>
                 <view style="line-height: 50px" wx:for="{{years}}" wx:key="index">{{item}}年</view>
             </picker-view-column>
@@ -131,10 +145,7 @@
   import wepy from 'wepy'
   let curTime = new Date()
   let curYear = curTime.getFullYear()
-  let curMonth = curTime.getMonth() + 1
-  let curDay = curTime.getDate()
-  let curHour = curTime.getHours()
-  let curMinutes = curTime.getMinutes()
+
   let years = []
   let months = []
   let days = []
@@ -165,23 +176,31 @@
         type: String,
         default: '请选择出生时间',
         twoWay: true
+      },
+      isShow: {
+        type: Boolean,
+        default: false,
+        twoWay: true
       }
     }
 
     data = {
+      dataTypeIndex: 0,
       years,
       months,
       days,
       hours,
       minutes,
+      chooseDate: '',
+      value: '',
       date_type_array: [
         {
-          name: "公历",
-          value: 1
+          name: '公历',
+          value: 0
         },
         {
-          name: "农历",
-          value: 2
+          name: '农历',
+          value: 1
         }
       ]
     }
@@ -189,13 +208,40 @@
     }
 
     watch = {
+      isShow (newValue, oldValue) {
+        console.log(`num value: ${oldValue} -> ${newValue}`)
+        if (newValue === true) {
+          let curTime = new Date()
+          let curYear = curTime.getFullYear()
+          let curMonth = curTime.getMonth() + 1
+          let curDay = curTime.getDate()
+          let curHour = curTime.getHours()
+          let curMinutes = curTime.getMinutes()
+          let yearIndex = curYear - 1900
+          let monthIndex = curMonth - 1
+          let dayIndex = curDay - 1
+          let hourIndex = curHour
+          let minuteIndex = curMinutes
+          this.value = [yearIndex, monthIndex, dayIndex, hourIndex, minuteIndex]
+          this.chooseDate = `${this.years[this.value[0]]}-${this.months[this.value[1]]}-${this.days[this.value[2]]} ${this.hours[this.value[3]]}:${this.minutes[this.value[4]]}`
+          this.$apply()
+        }
+      }
     }
 
     methods = {
       bindChange (e) {
         console.log(e)
         let valArr = e.detail.value
-        this.date = `${this.years[valArr[0]]}-${this.months[valArr[1]]}-${this.days[valArr[2]]} ${this.hours[valArr[3]]}:${this.minutes[valArr[4]]}`
+        this.chooseDate = `${this.years[valArr[0]]}-${this.months[valArr[1]]}-${this.days[valArr[2]]} ${this.hours[valArr[3]]}:${this.minutes[valArr[4]]}`
+      },
+      close () {
+        this.date = this.chooseDate + this.date_type_array[this.dataTypeIndex].name
+        this.isShow = false
+      },
+      changeDateType (e) {
+        console.log(e)
+        this.dataTypeIndex = e.detail.value
       }
     }
   }

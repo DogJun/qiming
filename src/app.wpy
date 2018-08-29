@@ -1,6 +1,8 @@
 <style lang="less">
+@import "./styles/variable.less";
 page {
-  // background: #F7F8FA;
+  background: @bg-color;
+  color: @font-color;
 }
 </style>
 

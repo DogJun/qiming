@@ -1,5 +1,5 @@
 <style lang="less">
-@import "./styles/variable.less";
+@import "./styles/index.less";
 page {
   background: @bg-color;
   color: @font-color;
@@ -19,6 +19,8 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
+      'pages/result/index',
+      'pages/authorize/index',
       'pages/home/index',
       'pages/qiming/index',
       'pages/user/index'
@@ -60,6 +62,7 @@ export default class extends wepy.app {
   constructor () {
     super()
     this.use('requestfix')
+    this.use('promisify')
   }
 
   onLaunch() {

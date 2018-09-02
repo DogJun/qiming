@@ -1,117 +1,221 @@
 <style lang="less">
-@import "../../styles/variable.less";
-.page {
-  picker {
-    display: inline-block;
-  }
-  &-swiper {
-    width: 100%;
-    height: 350rpx;
-    image {
+  @import "../../styles/variable.less";
+  .page {
+    picker {
+      display: inline-block;
+    }
+    &-swiper {
       width: 100%;
-      height: 100%;
-    }
-  }
-  &-text {
-    display: block;
-    color: @primary-color;
-    margin: 20rpx auto;
-    text-align: center;
-  }
-  &-form {
-    width: 670rpx;
-    margin: 0 auto;
-    border-radius: 5rpx;
-    &-box {
-      padding: 10rpx 0;
-      font-size: 0;
-      margin-bottom: 20rpx;
-      // &:last-child {
-      //   border-bottom: 0;
-      // }
-      .desc {
-        font-size: 32rpx;
-        display: inline-block;
-        width: 150rpx;
-        vertical-align: middle;
-      }
-      .wish-desc {
-        font-size: 32rpx;
-      }
-      .value {
-        font-size: 32rpx;
-        display: inline-block;
-        width: 510rpx;
-        border-bottom: 1rpx solid @border-color;
-        vertical-align: middle;
+      height: 350rpx;
+      image {
+        width: 100%;
+        height: 100%;
       }
     }
+    &-text {
+      display: block;
+      color: @primary-color;
+      margin: 20rpx auto;
+      text-align: center;
+    }
+    &-form {
+      width: 670rpx;
+      margin: 0 auto;
+      border-radius: 5rpx;
+      &-box {
+        padding: 10rpx 0;
+        font-size: 0;
+        margin-bottom: 20rpx; // &:last-child {
+        //   border-bottom: 0;
+        // }
+        .desc {
+          font-size: 32rpx;
+          display: inline-block;
+          width: 150rpx;
+          vertical-align: middle;
+        }
+        .wish-desc {
+          font-size: 32rpx;
+        }
+        .value {
+          font-size: 32rpx;
+          display: inline-block;
+          width: 510rpx;
+          border-bottom: 1rpx solid @border-color;
+          vertical-align: middle;
+        }
+      }
+      .sex-box {
+        display: inline-block;
+        font-size: 32rpx;
+        vertical-align: middle;
+        margin-right: 20rpx;
+        .sex-img {
+          margin-left:10rpx;
+          margin-right:10rpx;
+          border:2rpx solid @primary-color;
+          width:40rpx;
+          height:40rpx;
+          border-radius:50%;
+          vertical-align: middle;
+          &.active {
+            background: @primary-color;
+          }
+        }
+        .sex-text {
+          vertical-align: middle;
+        }
+      }
+    }
+    &-submit {
+      width: 670rpx;
+      height: 80rpx;
+      margin-top: 50rpx;
+      background: @primary-color;
+      color: #fff;
+      border-radius: 5rpx;
+      line-height: 80rpx;
+      text-align: center;
+      font-size: 32rpx;
+    }
+    .select_box,
+    .exper_info_ok {
+      position: fixed;
+      z-index: 10000;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      text-align: left;
+      font-size: 1.0714rem;
+      background: #fff;
+      border-top: 0;
+      transform: translateY(100%);
+    }
+    .select_box .s_tit,
+    .exper_info_ok .s_tit {
+      padding: 0 30rpx;
+      height: 90rpx;
+      line-height: 90rpx;
+      font-size: 32rpx;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 16rpx;
+      position: relative;
+    }
+    .select_box .s_tit text,
+    .exper_info_ok .s_tit text {
+      font-size: 28rpx;
+      color: #ccc;
+      padding-left: 20rpx;
+    }
+    .select_box .close,
+    .exper_info_ok .close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0 28rpx;
+      font-size: 28rpx;
+      color: @primary-color;
+      display: box;
+    }
+    .select_box .s_box,
+    .exper_info_ok .s_box {
+      padding: 0 14rpx 32rpx 30rpx;
+    }
+    .select_box .s_box .boy.none,
+    .select_box .s_box .girl.none {
+      display: none;
+    }
+    .select_box checkbox-group {
+      overflow: hidden;
+    }
+    .select_box label {
+      float: left;
+      padding: 0 24rpx;
+      background: #eee;
+      line-height: 64rpx;
+      color: #333;
+      margin: 16rpx 14rpx 0 0;
+      border-radius: 64rpx;
+      font-size: 32rpx;
+    }
+    .select_box label.on {
+      background: @primary-color;
+      color: #fff;
+    }
+    .select_box .s_box .ts {
+      font-size: 24rpx;
+      color: @primary-color;
+      line-height: 40rpx;
+      padding-top: 22rpx;
+    }
+    .select_box .s_box input {
+      display: none;
+    }
+    .select_box.show,
+    .exper_info_ok.show {
+      transform: translateY(0%);
+      transition: all .3s;
+    }
   }
-  &-submit {
-    width: 670rpx;
-    height: 80rpx;
-    margin-top: 50rpx;
-    background: @primary-color;
-    color: #fff;
-    border-radius: 5rpx;
-    line-height: 80rpx;
-    text-align: center;
-    font-size: 32rpx;
-  }
-}
-
 </style>
+
 <template>
   <view class="page">
     <!-- 轮播图 -->
-    <swiper class="page-swiper" indicator-dots="{{indicatorDots}}"
-      autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
-      <block wx:for="{{imgUrls}}">
+    <swiper class="page-swiper" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+      <block wx:for="{{imgUrls}}" wx:key="id">
         <swiper-item>
-          <image src="{{item}}" class="slide-image"/>
+          <image src="{{item}}" class="slide-image" />
         </swiper-item>
       </block>
     </swiper>
     <text class="page-text">已为100000+人提供服务</text>
     <view class="page-form">
       <view class="page-form-box">
+        <text class="desc" space="emsp">性  别</text>
+        <view bindtap="chooseSex" class="sex-box" id="boy">
+          <image class="sex-img" :class="{ 'active': sex === 'boy' }" src="/images/dagou.png"></image>
+          <text class="sex-text">男</text>
+        </view>
+        <view bindtap="chooseSex" class="sex-box" id="girl">
+          <image class="sex-img" :class="{ 'active': sex === 'girl' }" src="/images/dagou.png"></image>
+          <text class="sex-text">女</text>
+        </view>
+      </view>
+      <view class="page-form-box">
         <text class="desc" space="emsp">姓  氏</text>
-        <input
-          type="text"
-          class="value"
-          placeholder="请输入姓氏"
-          placeholder-style="color: #dddddd"
-        />
+        <input type="text" class="value" placeholder="请输入姓氏" placeholder-style="color:#dddddd" />
       </view>
       <view class="page-form-box">
         <text class="desc">出生时间</text>
-        <input
-          @tap="showCalendar"
-          class="value"
-          placeholder="请选择出生时间"
-          value="{{date}}"
-          placeholder-style="color: #dddddd"
-          disabled
-        />
+        <input @tap="showCalendar" class="value" placeholder="请选择出生时间" value="{{date}}" placeholder-style="color:#dddddd" disabled="true" />
       </view>
       <view class="page-form-box">
         <text class="desc">出生地点</text>
         <picker mode="region" bindchange="bindRegionChange">
-          <input
-            class="value"
-            placeholder="请选择出生地点"
-            value="{{region}}"
-            placeholder-style="color: #dddddd"
-            disabled
-          />
+          <input class="value" placeholder="请选择出生地点" value="{{region}}" placeholder-style="color:#dddddd" disabled="true" />
         </picker>
       </view>
       <view class="page-form-box">
-        <text class="wish-desc">起名意愿</text>
+        <text class="desc">起名意愿</text>
+        <input @tap="showModal" class="value" placeholder="请选择起名意愿" value="{{checkText}}" placeholder-style="color: #dddddd;" disabled="true" />
       </view>
     </view>
     <button class="page-submit">立即起名</button>
-
+    <view class="select_box{{expectOpen?' show':''}}">
+      <view class="s_tit">期望性格<text>(多选 可选1-6个)</text>
+        <icon bindtap="close" class="close">确定</icon>
+      </view>
+      <view class="s_box clearfix">
+        <checkbox-group bindchange="character">
+          <label class="{{item.checked?'on':''}}" wx:for="{{checkCharacterItems}}" wx:key="index">
+            <checkbox @tap="tap" checked="{{item.checked}}" hidden="true" value="{{item.value}}"></checkbox>{{item.text}}
+          </label>
+        </checkbox-group>
+        <input hidden name="name_character" type="text" value="{{checkText}}" />
+      </view>
+    </view>
     <calendar :date.sync="date" :isShow.sync="isShow"></calendar>
   </view>
 </template>
@@ -126,8 +230,8 @@
     components = {
       calendar
     }
-
     data = {
+      sex: 'boy', // 性别
       date: '',
       imgUrls: [
         'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
@@ -140,27 +244,203 @@
       duration: 1000,
       isShow: false, // 是否显示日期选择组件
       region: '',
-      customItem: '全部'
+      customItem: '全部',
+      expectOpen: false,
+      checkCharacterItems: [
+        {
+          value: '0',
+          name: 'a',
+          text: '爱学习',
+          checked: false
+        },
+        {
+          value: '1',
+          name: 'b',
+          text: '好奇心',
+          checked: false
+        },
+        {
+          value: '2',
+          name: 'c',
+          text: '判断力',
+          checked: false
+        },
+        {
+          value: '3',
+          name: 'd',
+          text: '创造力',
+          checked: false
+        },
+        {
+          value: '4',
+          name: 'e',
+          text: '洞察力',
+          checked: false
+        },
+        {
+          value: '5',
+          name: 'f',
+          text: '勇敢',
+          checked: false
+        },
+        {
+          value: '6',
+          name: 'g',
+          text: '毅力',
+          checked: false
+        },
+        {
+          value: '7',
+          name: 'h',
+          text: '诚实',
+          checked: false
+        },
+        {
+          value: '8',
+          name: 'i',
+          text: '爱',
+          checked: false
+        },
+        {
+          value: '9',
+          name: 'j',
+          text: '善良',
+          checked: false
+        },
+        {
+          value: '10',
+          name: 'k',
+          text: '情商高',
+          checked: false
+        },
+        {
+          value: '11',
+          name: 'l',
+          text: '忠诚',
+          checked: false
+        },
+        {
+          value: '12',
+          name: 'm',
+          text: '正直',
+          checked: false
+        },
+        {
+          value: '13',
+          name: 'n',
+          text: '领导力',
+          checked: false
+        },
+        {
+          value: '14',
+          name: 'o',
+          text: '宽容',
+          checked: false
+        },
+        {
+          value: '15',
+          name: 'p',
+          text: '谦虚',
+          checked: false
+        },
+        {
+          value: '16',
+          name: 'q',
+          text: '谨慎',
+          checked: false
+        },
+        {
+          value: '17',
+          name: 'r',
+          text: '自律',
+          checked: false
+        },
+        {
+          value: '18',
+          name: 's',
+          text: '欣赏力',
+          checked: false
+        },
+        {
+          value: '19',
+          name: 't',
+          text: '感恩',
+          checked: false
+        },
+        {
+          value: '20',
+          name: 'u',
+          text: '乐观',
+          checked: false
+        },
+        {
+          value: '21',
+          name: 'v',
+          text: '幽默',
+          checked: false
+        },
+        {
+          value: '22',
+          name: 'w',
+          text: '信仰',
+          checked: false
+        },
+        {
+          value: '23',
+          name: 'x',
+          text: '激情',
+          checked: false
+        }
+      ],
+      checkArr: [],
+      checkText: ''
     }
-
-    computed = {
-    }
-
+    computed = {}
     methods = {
-      showCalendar () {
-        console.log('11')
+      showCalendar() {
         this.isShow = true
       },
-      bindRegionChange: function (e) {
+      bindRegionChange: function(e) {
         console.log('picker发送选择改变，携带值为', e.detail.value)
         this.region = e.detail.value
+      },
+      character (e) {
+        // let arr = e.currentTarget.dataset.array
+        // let text = e.currentTarget.dataset.text
+        // let name = e.currentTarget.dataset.name
+        // this.value = e.detail.value
+        if (e.detail.value.length < 7) {
+          this.checkArr = e.detail.value
+          this.checkText = ''
+          for (let i = 0; i < this.checkCharacterItems.length; i++) {
+            this.checkCharacterItems[i].checked = false
+          }
+          for (let j = 0; j < this.checkArr.length; j++) {
+            let choseItem = this.checkCharacterItems[this.checkArr[j]]
+            choseItem.checked = true
+            if (this.checkText) {
+              this.checkText = this.checkText + ',' + choseItem.text
+            } else {
+              this.checkText += choseItem.text
+            }
+          }
+        } else {
+          // TODO 提示最多只能选择6个
+          console.log('最多只能选择6个')
+        }
+      },
+      close () {
+        this.expectOpen = false
+      },
+      showModal () {
+        this.expectOpen = true
+      },
+      chooseSex (e) {
+        console.log(e.currentTarget.id)
+        this.sex = e.currentTarget.id
       }
     }
-
-    events = {
-    }
-
-    onLoad() {
-    }
+    events = {}
+    onLoad() {}
   }
 </script>

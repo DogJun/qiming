@@ -1,0 +1,104 @@
+<style lang="less">
+.info {
+  margin-bottom: 20rpx;
+  padding: 20rpx 34rpx;
+  background: #fff;
+  box-shadow: 0rpx 2rpx 12rpx 0rpx rgba(214,223,232,1);
+  text {
+    display: block;
+  }
+  .info-header {
+    font-size: 36rpx;
+    color: rgba(0, 0, 0, .85);
+    margin-bottom: 20rpx;
+  }
+  .info-content {
+    font-size: 28rpx;
+    color: rgba(0, 0, 0, .65);
+    margin-bottom: 18rpx;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+.list {
+  .list-item {
+    padding: 20rpx;
+    margin: 0 34rpx;
+    background: #fff;
+    margin-bottom: 20rpx;
+    position: relative;
+    box-shadow: 0rpx 6rpx 18rpx 0rpx rgba(214,223,232,0.7);
+    border-radius: 5rpx;
+    .icon-right {
+      position: absolute;
+      right: 20rpx;
+      top: 50%;
+      font-size: 28rpx;
+      transform: translateY(-50%);
+      color: rgba(199,199,204,1);
+    }
+  }
+}
+</style>
+<template>
+  <view class="result">
+    <view class="info">
+      <text class="info-header">基本信息</text>
+      <text class="info-content">姓氏： 黄</text>
+      <text class="info-content">性别： 男</text>
+      <text class="info-content">出生地点： 广东省汕头市潮南区</text>
+      <text class="info-content">出生日期： 2018-10-29 12:00 （农历）</text>
+      <text class="info-content">起名意愿： 乐观，善良，淳朴，高智商</text>
+    </view>
+    <view class="list">
+      <view class="list-item">
+        <text class="name">黄大帅</text>
+        <text class="score">80分</text>
+        <i class="iconfont icon-right" />
+      </view>
+      <view class="list-item">
+        <text class="name">黄大帅</text>
+        <text class="score">80分</text>
+        <i class="iconfont icon-right" />
+      </view>
+      <view class="list-item">
+        <text class="name">黄大帅</text>
+        <text class="score">80分</text>
+        <i class="iconfont icon-right" />
+      </view>
+      <view class="list-item">
+        <text class="name">黄大帅</text>
+        <text class="score">80分</text>
+        <i class="iconfont icon-right" />
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '结果'
+    }
+    components = {
+    }
+
+    data = {
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    events = {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

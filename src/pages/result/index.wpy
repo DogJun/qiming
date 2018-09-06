@@ -85,6 +85,27 @@
             color: #333;
             line-height: 1;
           }
+          .sj {
+            position:absolute;
+            left:50%;
+            bottom:-2rpx;
+            transform:translateX(-50%);
+            padding:10rpx 10rpx 0;
+            overflow:hidden;
+            height:8rpx;
+            icon {
+              display:block;
+              width:30rpx;
+              height:30rpx;
+              background:#fff;
+              border:1px solid #d7d7d7;
+              margin:0 auto;
+              transform:rotate(45deg);
+            }
+          }
+        }
+        .flex {
+          flex: 1;
         }
         .btn {
           text-align: center;
@@ -126,6 +147,7 @@
             overflow:hidden;
             padding-top: 0;
             margin-bottom:24rpx;
+            flex: 1;
           }
         }
       }
@@ -151,9 +173,15 @@
               <text>黄凯</text>
             </view>
             <view class="score">
-              <view class="num">96</view>
-              <view class="desc">综合评分</view>
+              <view>
+                <view class="num">96</view>
+                <view class="desc">综合评分</view>
+              </view>
+              <view class="sj">
+                <icon></icon>
+              </view>
             </view>
+            <view class="flex"></view>
             <view class="btn">
               <button>查看详情</button>
             </view>

@@ -9,6 +9,7 @@ page {
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
+import {wxLogin} from '@/utils/api'
 
 import { setStore } from 'wepy-redux'
 import configStore from './store'
@@ -66,33 +67,66 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
-    this.testAsync()
+    this.checkLoginState()
   }
-
-  sleep (s) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise resolved')
-      }, s * 1000)
-    })
-  }
-
-  async testAsync () {
-    const data = await this.sleep(3)
-    console.log(data)
-  }
-
-  getUserInfo(cb) {
-    const that = this
-    if (this.globalData.userInfo) {
-      return this.globalData.userInfo
-    }
-    wepy.getUserInfo({
-      success (res) {
-        that.globalData.userInfo = res.userInfo
-        cb && cb(res.userInfo)
+  // 检查登录状态
+  async checkLoginState (obj) {
+    try {
+      // 微信自己的code 状态
+      let wxLoginState = await wepy.checkSession().then(res => { return true }, res => { return false })
+      console.log('微信检查是否过期：', !wxLoginState)
+      let token = wepy.getStorageSync('token')
+      if (!wxLoginState || !token) {
+        return await this.login(obj)
+      } else {
+        // 获取用户信息
+        // this.methods.getUserInfoAction({
+        //   ...obj.query,
+        //   scene: obj.scene
+        // }).then(res => {
+        //   if (this.loginCallback) {
+        //     this.loginCallback()
+        //   }
+        //   this.logSuccess(res)
+        //   console.log(res)
+        // })
+        // return true
       }
-    })
+    } catch (err) {
+      console.log(err)
+      console.log('检查过期状态出错')
+    }
+  }
+  // 登录
+  async login (obj) {
+    try {
+      let { code: myCode } = await wepy.login()
+      let loginData = {
+        code: myCode
+      }
+      wxLogin(loginData).then(res => {
+        console.log('登陆后返回的数据', res)
+        wepy.setStorageSync('token', res.data.threeSessionKey)
+        // if (self.loginCallback) {
+        //   self.loginCallback()
+        // }
+        // 获取用户信息
+        // self.methods.getUserInfoAction({
+        //   ...obj.query,
+        //   scene: obj.scene
+        // }).then(res => {
+        //   if (self.loginCallback) {
+        //     self.loginCallback()
+        //   }
+        //   self.logSuccess(res)
+        //   console.log(res)
+        // })
+      }).catch(err => {
+        console.log(err)
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 </script>

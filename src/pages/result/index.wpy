@@ -220,7 +220,7 @@
 
 <script>
   import wepy from 'wepy'
-
+  import { getName } from '@/utils/api'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '结果'
@@ -241,6 +241,19 @@
     }
 
     onLoad() {
+      let params = {
+        surname: '',
+        limit: 10,
+        offset: 1,
+        birthDate: '2018-09-09',
+        sex: '男',
+        birthAddress: '广东省深圳市福田区',
+        guoliOrnongli: '1',
+        expectation: '自信'
+      }
+      getName(params).then(res => {
+        console.log(res)
+      })
     }
   }
 </script>

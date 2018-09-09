@@ -202,7 +202,7 @@
         <input @tap="showModal" class="value" placeholder="请选择起名意愿" value="{{checkText}}" placeholder-style="color: #dddddd;" disabled="true" />
       </view>
     </view>
-    <button class="page-submit">立即起名</button>
+    <button class="page-submit" @tap="submit">立即起名</button>
     <view class="select_box{{expectOpen?' show':''}}">
       <view class="s_tit">期望性格<text>(多选 可选1-6个)</text>
         <icon bindtap="close" class="close">确定</icon>
@@ -438,6 +438,11 @@
       chooseSex (e) {
         console.log(e.currentTarget.id)
         this.sex = e.currentTarget.id
+      },
+      submit () {
+        wepy.navigateTo({
+          url: '/pages/result/index'
+        })
       }
     }
     events = {}

@@ -8,7 +8,7 @@ async function fetch (options = {}) {
   let token = wepy.getStorageSync('token') || ''
   if (token) {
     options.data = options.data || {}
-    options.data.token = token
+    options.data.thirdSessionKey = token
   }
   options.url = BASE_URL + options.url
   console.log(options)

@@ -24,39 +24,10 @@
 }
 .list {
   padding:0 20rpx;
-  // .list-item {
-  //   padding: 20rpx;
-  //   margin: 0 34rpx;
-  //   background: #fff;
-  //   margin-bottom: 20rpx;
-  //   position: relative;
-  //   box-shadow: 0rpx 6rpx 18rpx 0rpx rgba(214,223,232,0.7);
-  //   border-radius: 5rpx;
-  //   .icon-right {
-  //     position: absolute;
-  //     right: 20rpx;
-  //     top: 50%;
-  //     font-size: 28rpx;
-  //     transform: translateY(-50%);
-  //     color: rgba(199,199,204,1);
-  //   }
-  // }
   .list-item {
-    // background-image:url(https://images.yw11.com/xchengxu/yw11/box02_bj_j_l.jpg),url(https://images.yw11.com/xchengxu/yw11/box02_bj_j_r.jpg),url(https://images.yw11.com/xchengxu/yw11/box02_bj_j_t.jpg),url(https://images.yw11.com/xchengxu/yw11/box02_bj_j_b.jpg);
-    // background-repeat:no-repeat;
-    // background-position:left top,right top,left top,left bottom;
-    // background-size:15rpx 628rpx,15rpx 628rpx,720rpx 15rpx,720rpx 15rpx;
     padding:15rpx;
     background-color:white;
-    // background-image:url(https://images.yw11.com/xchengxu/yw11/box_bj_j_01.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_02.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_03.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_04.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_t.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_b.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_l.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_j_r.jpg);
-    // background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,repeat-x,repeat-x,repeat-y,repeat-y;
-    // background-position:left top,right top,right bottom,left bottom,0 top,0 bottom,left 0,right 0;
-    // background-size:15rpx 15rpx;
     &-content {
-      // background-image:url(https://images.yw11.com/xchengxu/yw11/box_bj_yj_01.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_yj_02.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_yj_03.jpg),url(https://images.yw11.com/xchengxu/yw11/box_bj_yj_04.jpg);
-      // background-repeat:no-repeat;
-      // background-position:left top,right top,right bottom,left bottom;
-      // background-size:15rpx 15rpx;
       .item-header {
         padding: 0 24rpx;
         display: flex;
@@ -183,7 +154,7 @@
             </view>
             <view class="flex"></view>
             <view class="btn">
-              <button>查看详情</button>
+              <button @tap="toDetail">查看详情</button>
             </view>
           </view>
           <view class="item-footer">
@@ -235,6 +206,11 @@
     }
 
     methods = {
+      toDetail () {
+        wepy.navigateTo({
+          url: '/pages/detail/index'
+        })
+      }
     }
 
     events = {
@@ -242,14 +218,15 @@
 
     onLoad() {
       let params = {
-        surname: '',
+        surname: '黄',
         limit: 10,
         offset: 1,
-        birthDate: '2018-09-09',
-        sex: '男',
+        birthDate: '2018-05-01 12:12',
+        sex: '1',
         birthAddress: '广东省深圳市福田区',
         guoliOrnongli: '1',
-        expectation: '自信'
+        expectation: '自信',
+        dateType: 'dateType'
       }
       getName(params).then(res => {
         console.log(res)

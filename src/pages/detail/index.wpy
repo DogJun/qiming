@@ -1,0 +1,92 @@
+<style lang="less">
+@import "../../styles/variable.less";
+.bottom-btn{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1rpx solid rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 20rpx 0;
+  z-index: 10;
+  button{
+    display: inline-block;
+    width:330rpx;
+    height:80rpx;
+    background:rgba(232,244,255,1);
+    border-radius:5rpx;
+    border:2rpx solid @primary-color;
+    font-size:32rpx;
+    color:@primary-color;
+    line-height:80rpx;
+    margin: 0 10rpx;
+    i{
+      margin-right: 10rpx;
+      font-size: 36rpx;
+    }
+    &:last-child{
+      color: #ffffff;
+      background: @primary-color;
+    }
+  }
+  .more-info{
+    width: 80%;
+  }
+  .to-home{
+    display: inline-block;
+    width: 100rpx;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 20rpx;
+    i{
+      font-size: 44rpx;
+    }
+    ~ button{
+      width: 280rpx;
+      vertical-align: middle;
+      &.more-info{
+        width: 75%;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <view class="detail">
+    <nameBox></nameBox>
+    <view class="bottom-btn">
+      <button plain="true" @tap="collectInfo" wx:if="{{infoDetail.collect_status === 0}}"><i class="iconfont icon-star" />收藏</button>
+      <button plain="true" @tap="unCollectInfo" wx:else><i class="iconfont icon-star-full" />收藏</button>
+      <button plain="true" @tap="share"><i class="iconfont icon-share"/>查看收藏夹</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import nameBox from '@/widgets/nameBox'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '名字详情'
+    }
+    components = {
+      nameBox
+    }
+
+    data = {
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    events = {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

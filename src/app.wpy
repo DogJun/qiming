@@ -24,7 +24,8 @@ export default class extends wepy.app {
       'pages/result/index',
       'pages/home/index',
       'pages/qiming/index',
-      'pages/user/index'
+      'pages/user/index',
+      'pages/detail/index'
     ],
     window: {
       backgroundTextStyle: '#fff',

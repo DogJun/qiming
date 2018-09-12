@@ -128,14 +128,14 @@
 </style>
 <template>
   <view class="result">
-    <view class="info">
+    <!-- <view class="info">
       <text class="info-header">基本信息</text>
       <text class="info-content">姓氏： 黄</text>
       <text class="info-content">性别： 男</text>
       <text class="info-content">出生地点： 广东省汕头市潮南区</text>
       <text class="info-content">出生日期： 2018-10-29 12:00 （农历）</text>
       <text class="info-content">起名意愿： 乐观，善良，淳朴，高智商</text>
-    </view>
+    </view> -->
     <view class="list">
       <view class="list-item">
         <view class="list-item-content">
@@ -216,17 +216,13 @@
     events = {
     }
 
-    onLoad() {
+    onLoad(option) {
+      let nameInfo = wepy.getStorageSync('NAME_INFO')
       let params = {
-        surname: '黄',
         limit: 10,
         offset: 1,
-        birthDate: '2018-05-01 12:12',
-        sex: '1',
-        birthAddress: '广东省深圳市福田区',
-        guoliOrnongli: '1',
-        expectation: '自信',
-        dateType: 'dateType'
+        dateType: 'dateType',
+        ...nameInfo
       }
       getName(params).then(res => {
         console.log(res)

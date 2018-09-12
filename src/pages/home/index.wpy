@@ -174,27 +174,48 @@
     <view class="page-form">
       <view class="page-form-box">
         <text class="desc" space="emsp">性  别</text>
-        <view bindtap="chooseSex" class="sex-box" id="boy">
-          <image class="sex-img" :class="{ 'active': sex === 'boy' }" src="/images/dagou.png"></image>
+        <view bindtap="chooseSex" class="sex-box" id="1">
+          <image class="sex-img" :class="{ 'active': sex === '1' }" src="/images/dagou.png"></image>
           <text class="sex-text">男</text>
         </view>
-        <view bindtap="chooseSex" class="sex-box" id="girl">
-          <image class="sex-img" :class="{ 'active': sex === 'girl' }" src="/images/dagou.png"></image>
+        <view bindtap="chooseSex" class="sex-box" id="0">
+          <image class="sex-img" :class="{ 'active': sex === '0' }" src="/images/dagou.png"></image>
           <text class="sex-text">女</text>
         </view>
       </view>
       <view class="page-form-box">
         <text class="desc" space="emsp">姓  氏</text>
-        <input type="text" class="value" placeholder="请输入姓氏" placeholder-style="color:#dddddd" />
+        <input
+          type="text"
+          class="value"
+          placeholder="请输入姓氏"
+          placeholder-style="color:#dddddd"
+          value="{{surname}}"
+          @input="onInputSurname"
+          maxlength="10"
+        />
       </view>
       <view class="page-form-box">
         <text class="desc">出生时间</text>
-        <input @tap="showCalendar" class="value" placeholder="请选择出生时间" value="{{date}}" placeholder-style="color:#dddddd" disabled="true" />
+        <input
+          @tap="showCalendar"
+          class="value"
+          placeholder="请选择出生时间"
+          value="{{dateText}}"
+          placeholder-style="color:#dddddd"
+          disabled="true"
+        />
       </view>
       <view class="page-form-box">
         <text class="desc">出生地点</text>
         <picker mode="region" bindchange="bindRegionChange">
-          <input class="value" placeholder="请选择出生地点" value="{{region}}" placeholder-style="color:#dddddd" disabled="true" />
+          <input
+            class="value"
+            placeholder="请选择出生地点"
+            value="{{region}}"
+            placeholder-style="color:#dddddd"
+            disabled="true"
+          />
         </picker>
       </view>
       <view class="page-form-box">
@@ -216,7 +237,7 @@
         <input hidden name="name_character" type="text" value="{{checkText}}" />
       </view>
     </view>
-    <calendar :date.sync="date" :isShow.sync="isShow"></calendar>
+    <calendar :date.sync="date" :dateType.sync="dateType" :isShow.sync="isShow"></calendar>
   </view>
 </template>
 
@@ -231,8 +252,10 @@
       calendar
     }
     data = {
-      sex: 'boy', // 性别
-      date: '',
+      sex: '1', // 性别 男1 女0
+      surname: '', // 姓氏
+      date: '', // 日期
+      dateType: '1', // 日期类型 公历1 农历0
       imgUrls: [
         'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
         'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
@@ -395,20 +418,28 @@
       checkArr: [],
       checkText: ''
     }
-    computed = {}
+    computed = {
+      dateText () {
+        let type = this.dateType === '1' ? '公历' : '农历'
+        return this.date ? `${this.date} ${type}` : ''
+      }
+    }
     methods = {
+      // 输入姓氏
+      onInputSurname (e) {
+        this.surname = e.detail.value
+      },
+      // 显示日历
       showCalendar() {
         this.isShow = true
       },
+      // 选择地区
       bindRegionChange: function(e) {
         console.log('picker发送选择改变，携带值为', e.detail.value)
         this.region = e.detail.value
       },
+      // 选择起名意愿
       character (e) {
-        // let arr = e.currentTarget.dataset.array
-        // let text = e.currentTarget.dataset.text
-        // let name = e.currentTarget.dataset.name
-        // this.value = e.detail.value
         if (e.detail.value.length < 7) {
           this.checkArr = e.detail.value
           this.checkText = ''
@@ -429,17 +460,30 @@
           console.log('最多只能选择6个')
         }
       },
+      // 关闭起名意愿
       close () {
         this.expectOpen = false
       },
+      // 打开起名意愿
       showModal () {
         this.expectOpen = true
       },
+      // 选择性别
       chooseSex (e) {
         console.log(e.currentTarget.id)
         this.sex = e.currentTarget.id
       },
+      // 立即起名
       submit () {
+        let nameInfo = {
+          surname: this.surname,
+          birthDate: this.date,
+          sex: this.sex,
+          birthAddress: this.region,
+          guoliOrnongli: this.dateType,
+          expectation: this.checkText
+        }
+        wepy.setStorageSync('NAME_INFO', nameInfo)
         wepy.navigateTo({
           url: '/pages/result/index'
         })

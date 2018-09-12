@@ -100,23 +100,14 @@
     <view class="time_tit dis_flex">
         <view class="date_type">
             <radio-group bindchange="changeDateType" class="radio-group">
-                <label class="radio {{item.value === dataTypeIndex ? 'on' : ''}}"
-                  wx:for="{{date_type_array}}"
-                  wx:for-index="idx"
-                  wx:key="idx"
-                  wx:for-item="item">
-                    <radio hidden value="{{item.value}}"></radio>{{item.name}}
-                  </label>
+                <label class="radio" :class="{'on': dateType === '1'}">
+                  <radio hidden value="1"></radio>公历
+                </label>
+                <label class="radio" :class="{'on': dateType === '0'}">
+                  <radio hidden value="0"></radio>农历
+                </label>
             </radio-group>
         </view>
-        <!-- <view class="checkbox {{dataTypeIndex==1?'hide':''}}">
-            <checkbox-group bindchange="checkRyue">
-                <label>
-                    <checkbox checked="{{isLeapIndex==1?'true':''}}" value="{{isLeapIndex}}"></checkbox>
-                    <icon></icon>闰月
-                </label>
-            </checkbox-group>
-        </view> -->
         <text @tap="close">确定</text>
     </view>
     <view class="time_con">
@@ -177,6 +168,11 @@
         default: '请选择出生时间',
         twoWay: true
       },
+      dateType: {
+        type: String,
+        default: '1', // 公历1 农历0
+        twoWay: true
+      },
       isShow: {
         type: Boolean,
         default: false,
@@ -185,24 +181,13 @@
     }
 
     data = {
-      dataTypeIndex: 0,
       years,
       months,
       days,
       hours,
       minutes,
       chooseDate: '',
-      value: '',
-      date_type_array: [
-        {
-          name: '公历',
-          value: 0
-        },
-        {
-          name: '农历',
-          value: 1
-        }
-      ]
+      value: ''
     }
     events = {
     }
@@ -236,12 +221,12 @@
         this.chooseDate = `${this.years[valArr[0]]}-${this.months[valArr[1]]}-${this.days[valArr[2]]} ${this.hours[valArr[3]]}:${this.minutes[valArr[4]]}`
       },
       close () {
-        this.date = this.chooseDate + this.date_type_array[this.dataTypeIndex].name
+        this.date = this.chooseDate
         this.isShow = false
       },
       changeDateType (e) {
-        console.log(e)
-        this.dataTypeIndex = e.detail.value
+        console.log(e.detail.value)
+        this.dateType = e.detail.value
       }
     }
   }

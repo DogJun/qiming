@@ -22,10 +22,14 @@
     }
   }
 }
+.result {
+  height: 100%;
+}
 .list {
-  padding:0 20rpx;
+  padding: 20rpx;
   .list-item {
     padding:15rpx;
+    margin-bottom: 20rpx;
     background-color:white;
     &-content {
       .item-header {
@@ -136,35 +140,49 @@
       <text class="info-content">出生日期： 2018-10-29 12:00 （农历）</text>
       <text class="info-content">起名意愿： 乐观，善良，淳朴，高智商</text>
     </view> -->
+    <scroll-view
+        class="listWrap"
+        scroll-y
+        bindscrolltolower="scrollToBottom"
+        style="height: 100%;"
+        enable-back-to-top
+    >
     <view class="list">
-      <view class="list-item">
-        <view class="list-item-content">
-          <view class="item-header">
-            <view class="name">
-              <text>黄凯</text>
-            </view>
-            <view class="score">
-              <view>
-                <view class="num">96</view>
-                <view class="desc">综合评分</view>
+      <block wx:for="{{listData}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        <view class="list-item">
+          <view class="list-item-content">
+            <view class="item-header">
+              <view class="name">
+                <text>{{item.name}}</text>
               </view>
-              <view class="sj">
-                <icon></icon>
+              <view class="score">
+                <view>
+                  <view class="num">{{item.score}}</view>
+                  <view class="desc">综合评分</view>
+                </view>
+                <view class="sj">
+                  <icon></icon>
+                </view>
+              </view>
+              <view class="flex"></view>
+              <view class="btn">
+                <button @tap="toDetail({{item.name}}, {{item.score}})">查看详情</button>
               </view>
             </view>
-            <view class="flex"></view>
-            <view class="btn">
-              <button @tap="toDetail">查看详情</button>
-            </view>
-          </view>
-          <view class="item-footer">
-            <view class="box">
-              <view class="box-left">凯</view>
-              <view class="box-right">凯字的五行为木 ，命局八字喜木，可以弥补性格缺陷，增强上进心，变的善良博爱、温文尔雅、气宇轩昂</view>
+            <view class="item-footer">
+              <view class="box">
+                <view class="box-left">{{item.firstName}}</view>
+                <view class="box-right">{{item.firstNameMeaning}}</view>
+              </view>
+              <view class="box" wx:if="{{item.secName}}">
+                <view class="box-left">{{item.secName}}</view>
+                <view class="box-right">{{item.secNameMeaning}}</view>
+              </view>
             </view>
           </view>
         </view>
-      </view>
+      </block>
+
       <!-- <view class="list-item">
         <text class="name">黄大帅</text>
         <text class="score">80分</text>
@@ -186,12 +204,15 @@
         <i class="iconfont icon-right" />
       </view> -->
     </view>
+    </scroll-view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import { getName } from '@/utils/api'
+
+  const LIMIT = 10 // 每页10条
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '结果'
@@ -200,33 +221,55 @@
     }
 
     data = {
+      nameInfo: {}, // 名字信息
+      listData: [], // 列表数据
+      currentPage: 1, // 当前页面
+      offset: 0, // 从第几条起
+      totalPage: 0 // 总页数
     }
 
     computed = {
     }
 
     methods = {
-      toDetail () {
+      toDetail (name, score) {
+        console.log(name, score, this.nameInfo.birthDate)
         wepy.navigateTo({
-          url: '/pages/detail/index'
+          url: `/pages/detail/index?name=${name}&score=${score}&birthDate=${this.nameInfo.birthDate}`
         })
+      },
+      // 滚动到底部
+      scrollToBottom () {
+        // TODO 加载loading && 加载到最后一页
+        if (this.totalPage > this.currentPage) {
+          this.currentPage++
+          this.offset += LIMIT
+          this.getListData()
+        }
       }
     }
 
     events = {
     }
-
-    onLoad(option) {
-      let nameInfo = wepy.getStorageSync('NAME_INFO')
+    getListData () {
       let params = {
-        limit: 10,
-        offset: 1,
+        limit: LIMIT,
+        offset: this.offset,
         dateType: 'dateType',
-        ...nameInfo
+        ...this.nameInfo
       }
       getName(params).then(res => {
         console.log(res)
+        if (this.offset === 0) {
+          this.totalPage = Math.ceil(res.data.total / LIMIT)
+        }
+        this.listData = this.listData.concat(res.data.rows)
+        this.$apply()
       })
+    }
+    onLoad(option) {
+      this.nameInfo = wepy.getStorageSync('NAME_INFO')
+      this.getListData()
     }
   }
 </script>

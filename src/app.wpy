@@ -3,6 +3,7 @@
 page {
   background: @bg-color;
   color: @font-color;
+  height: 100%;
 }
 </style>
 

@@ -1,5 +1,16 @@
 <style lang="less">
 @import "../../styles/variable.less";
+.detail {
+  background:#fff;
+  padding:20rpx;
+  margin-top:20rpx;
+  .item-title {
+    font-size:32rpx;
+  }
+  .item-content {
+    font-size:28rpx;
+  }
+}
 .bottom-btn{
   position: fixed;
   bottom: 0;
@@ -55,6 +66,18 @@
 <template>
   <view class="detail">
     <nameBox></nameBox>
+    <view class="detail">
+      <block wx:for="{{detailInfo}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        <view class="item">
+          <view class="item-title">
+            <text>{{item.type}}</text>
+          </view>
+          <view class="item-content">
+            <text>{{item.description}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
     <view class="bottom-btn">
       <button plain="true" @tap="collectInfo" wx:if="{{infoDetail.collect_status === 0}}"><i class="iconfont icon-star" />收藏</button>
       <button plain="true" @tap="unCollectInfo" wx:else><i class="iconfont icon-star-full" />收藏</button>
@@ -66,6 +89,7 @@
 <script>
   import wepy from 'wepy'
   import nameBox from '@/widgets/nameBox'
+  import {getDetailName} from '@/utils/api'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '名字详情'
@@ -75,6 +99,7 @@
     }
 
     data = {
+      detailInfo: []
     }
 
     computed = {
@@ -86,7 +111,18 @@
     events = {
     }
 
-    onLoad() {
+    onLoad (options) {
+      console.log(options)
+      let params = {
+        name: options.name,
+        score: options.score,
+        birthDate: options.birthDate
+      }
+      getDetailName(params).then((res) => {
+        console.log(res)
+        this.detailInfo = res.list
+        this.$apply()
+      })
     }
   }
 </script>

@@ -166,7 +166,7 @@
               </view>
               <view class="flex"></view>
               <view class="btn">
-                <button @tap="toDetail({{item.name}}, {{item.score}})">查看详情</button>
+                <button @tap="toDetail({{item.name}}, {{item.score}}, {{item.firstName}}, {{item.firstNameMeaning}}, {{item.secName}}, {{item.secNameMeaning}})">查看详情</button>
               </view>
             </view>
             <view class="item-footer">
@@ -232,10 +232,10 @@
     }
 
     methods = {
-      toDetail (name, score) {
+      toDetail (name, score, firstName, firstNameMeaning, secName, secNameMeaning) {
         console.log(name, score, this.nameInfo.birthDate)
         wepy.navigateTo({
-          url: `/pages/detail/index?name=${name}&score=${score}&birthDate=${this.nameInfo.birthDate}`
+          url: `/pages/detail/index?name=${name}&score=${score}&firstName=${firstName}&firstNameMeaning=${firstNameMeaning}&secName=${secName}&secNameMeaning=${secNameMeaning}&birthDate=${this.nameInfo.birthDate}`
         })
       },
       // 滚动到底部

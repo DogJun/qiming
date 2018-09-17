@@ -28,7 +28,7 @@
     bottom: 0;
     padding: 0 30rpx;
     font-size: 32rpx;
-    color: #17a8e2;
+    color: @primary-color;
     display: -webkit-box;
     -webkit-box-align: center;
     -webkit-box-pack: justify;

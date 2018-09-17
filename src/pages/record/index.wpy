@@ -1,0 +1,99 @@
+<style lang="less">
+@import "../../styles/variable.less";
+.list {
+  padding: 20rpx;
+  .box {
+    background: #fff;
+    border: 1rpx solid @border-color;
+    .box-info {
+      padding: 20rpx;
+      border-bottom: 1rpx solid @border-color;
+      font-size: 32rpx;
+      .surname {
+        display: inline-block;
+        margin-right: 100rpx;
+      }
+    }
+    .box-bottom {
+      height: 100rpx;
+      padding: 0 20rpx;
+      overflow: hidden;
+      text {
+        font-size: 28rpx;
+        line-height: 100rpx;
+        vertical-align: middle;
+        float: left;
+        color: #999;
+      }
+      button {
+        font-size: 32rpx;
+        width: 200rpx;
+        height: 60rpx;
+        line-height: 60rpx;
+        background: @primary-color;
+        color: #fff;
+        border: none;
+        vertical-align: middle;
+        float: right;
+        margin-top: 20rpx;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <view class="record">
+    <view class="list">
+      <view class="box">
+        <view class="box-info">
+          <view>
+            <text class="surname">姓氏：王</text>
+            <text>性别：男</text>
+          </view>
+          <view>
+            <text>出生日期：2018-09-09 10:58 公历</text>
+          </view>
+          <view>
+            <text>出生地点：北京市-北京市-东城区</text>
+          </view>
+        </view>
+        <view class="box-bottom">
+          <text>2018-09-09 12:45</text>
+          <button>继续起名</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {getRecord} from '@/utils/api'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '起名记录'
+    }
+    components = {
+    }
+
+    data = {
+      list: []
+    }
+
+    computed = {
+    }
+
+    methods = {
+    }
+
+    events = {
+    }
+
+    onLoad() {
+      console.log('onload')
+      getRecord().then(res => {
+        console.log(res)
+      })
+    }
+  }
+</script>

@@ -1,0 +1,77 @@
+<style lang="less">
+@import "../../styles/variable.less";
+.list {
+  font-size: 32rpx;
+}
+.title {
+  padding: 20rpx 40rpx 20rpx 20rpx;
+  background: #fff;
+  border-bottom: 1rpx solid @border-color;
+  position: relative;
+  i {
+    position:absolute;
+    top:50%;
+    right:20rpx;
+    transform:translateY(-50%);
+  }
+}
+.content {
+  padding: 20rpx;
+  &.hidden {
+    display: none;
+  }
+}
+</style>
+<template>
+  <view class="question">
+    <view class="list">
+      <block wx:for="{{list}}" wx:key="index">
+        <view class="title" @tap="toggleContent({{index}})">
+          <text>{{item.title}}</text>
+          <i wx:if="{{!item.isShow}}" class="iconfont icon-jiantouxia" />
+          <i wx:else class="iconfont icon-jiantoushang" />
+        </view>
+        <view class="content" :class="{'hidden': !item.isShow}">
+          <text decode="{{true}}">{{item.content}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {getQa} from '@/utils/api'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '常见问题'
+    }
+    components = {
+    }
+
+    data = {
+      list: []
+    }
+
+    computed = {
+    }
+
+    methods = {
+      toggleContent (index) {
+        let isShow = this.list[index].isShow
+        this.list[index].isShow = !isShow
+      }
+    }
+
+    events = {
+    }
+
+    onLoad() {
+      getQa().then(res => {
+        this.list = res.data
+        this.list.map(v => v.isShow = false)
+        this.$apply()
+      })
+    }
+  }
+</script>

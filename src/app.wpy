@@ -21,12 +21,15 @@ setStore(store)
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/authorize/index',
-      'pages/result/index',
       'pages/home/index',
+      'pages/result/index',
       'pages/qiming/index',
       'pages/user/index',
-      'pages/detail/index'
+      'pages/detail/index',
+      'pages/authorize/index',
+      'pages/feedback/index',
+      'pages/question/index',
+      'pages/record/index'
     ],
     window: {
       backgroundTextStyle: '#fff',
@@ -69,7 +72,26 @@ export default class extends wepy.app {
   }
 
   onLaunch() {
+    this.checkAuth()
     this.checkLoginState()
+  }
+  // 检查授权
+  async checkAuth () {
+    let res = await wepy.getSetting()
+    console.log('getSetting', res)
+    if (res && (res.authSetting)['scope.userInfo']) {
+      let userInfo = wepy.getStorageSync('USER_INFO')
+      if (!userInfo.nickName) {
+        let data = await wepy.getUserInfo()
+        if (data) {
+          wepy.setStorageSync('USER_INFO', data.userInfo)
+        }
+      }
+    } else {
+      wepy.reLaunch({
+        url: '/pages/authorize/index'
+      })
+    }
   }
   // 检查登录状态
   async checkLoginState (obj) {

@@ -61,18 +61,24 @@
       </view>
     </view>
     <view class="list">
-      <view class="list-item">
-        <text>起名记录</text>
-        <i class="iconfont icon-right" />
-      </view>
-      <view class="list-item">
-        <text>常见问题</text>
-        <i class="iconfont icon-right" />
-      </view>
-      <view class="list-item">
-        <text>反馈建议</text>
-        <i class="iconfont icon-right" />
-      </view>
+      <navigator url="/pages/record/index">
+        <view class="list-item">
+          <text>起名记录</text>
+          <i class="iconfont icon-right" />
+        </view>
+      </navigator>
+      <navigator url="/pages/question/index">
+        <view class="list-item">
+          <text>常见问题</text>
+          <i class="iconfont icon-right" />
+        </view>
+      </navigator>
+      <navigator url="/pages/feedback/index">
+        <view class="list-item">
+          <text>反馈建议</text>
+          <i class="iconfont icon-right" />
+        </view>
+      </navigator>
     </view>
   </view>
 </template>

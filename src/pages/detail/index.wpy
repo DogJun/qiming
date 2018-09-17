@@ -1,11 +1,124 @@
 <style lang="less">
 @import "../../styles/variable.less";
+
+.list-item {
+  padding:15rpx;
+  background-color:white;
+  &-content {
+    .item-header {
+      padding: 0 24rpx;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .name {
+        padding-right: 30rpx;
+        font-size: 72rpx;
+        color: #1f1f1f;
+        line-height: 1.25;
+      }
+      .score {
+        text-align: center;
+        padding: 26rpx 0;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .num {
+          font-size: 52rpx;
+          color: red;
+          font-weight: 700;
+        }
+        .desc {
+          font-size: 20rpx;
+          color: #333;
+          line-height: 1;
+        }
+        .sj {
+          position:absolute;
+          left:50%;
+          bottom:-2rpx;
+          transform:translateX(-50%);
+          padding:10rpx 10rpx 0;
+          overflow:hidden;
+          height:8rpx;
+          icon {
+            display:block;
+            width:30rpx;
+            height:30rpx;
+            background:#fff;
+            border:1px solid #d7d7d7;
+            margin:0 auto;
+            transform:rotate(45deg);
+          }
+        }
+      }
+      .flex {
+        flex: 1;
+      }
+      .btn {
+        text-align: center;
+        button {
+          height:68rpx;
+          line-height:68rpx;
+          padding:0 30rpx;
+          color:#fff;
+          background:@primary-color;
+          display:inline-block;
+          font-size:30rpx;
+          border-radius:6rpx;
+        }
+      }
+    }
+    .item-footer {
+      margin:0 24rpx;
+      border-top:2rpx solid #e2e2e2;
+      padding:26rpx 0 10rpx;
+      .box {
+        display: flex;
+        .box-left {
+          width:78rpx;
+          height:78rpx;
+          line-height:78rpx;
+          text-align:center;
+          color:#333;
+          font-size:50rpx;
+          background:url(https://images.yw11.com/xchengxu/yw11/tian.png) no-repeat;
+          background-size:cover;
+          margin-right:20rpx;
+          margin-top: 0;
+        }
+        .box-right {
+          font-size:28rpx;
+          display:-webkit-box;
+          // -webkit-box-orient:vertical;
+          // -webkit-line-clamp:2;
+          overflow:hidden;
+          padding-top: 0;
+          margin-bottom:24rpx;
+          flex: 1;
+        }
+      }
+    }
+  }
+}
 .detail {
-  background:#fff;
-  padding:20rpx;
-  margin-top:20rpx;
+  padding-bottom: 150rpx;
+  .detail-content {
+    background:#fff;
+    padding:20rpx;
+    margin: 20rpx;
+    border: 1rpx solid rgba(0,0,0,.5);
+  }
+  .item {
+    padding: 10rpx;
+    border-top: 1rpx solid rgba(0,0,0,.5);
+    &:first-child {
+      border-top: 0;
+    }
+  }
   .item-title {
     font-size:32rpx;
+    margin-bottom: 10rpx;
   }
   .item-content {
     font-size:28rpx;
@@ -65,41 +178,75 @@
 </style>
 <template>
   <view class="detail">
-    <nameBox></nameBox>
-    <view class="detail">
+    <view class="list-item" wx:if="{{nameInfo}}">
+      <view class="list-item-content">
+        <view class="item-header">
+          <view class="name">
+            <text>{{nameInfo.name}}</text>
+          </view>
+          <view class="score">
+            <view>
+              <view class="num">{{nameInfo.score}}</view>
+              <view class="desc">综合评分</view>
+            </view>
+            <view class="sj">
+              <icon></icon>
+            </view>
+          </view>
+          <!-- <view class="flex"></view> -->
+        </view>
+        <view class="item-footer">
+          <view class="box">
+            <view class="box-left">{{nameInfo.firstName}}</view>
+            <view class="box-right">{{nameInfo.firstNameMeaning}}</view>
+          </view>
+          <view class="box" wx:if="{{nameInfo.secName}}">
+            <view class="box-left">{{nameInfo.secName}}</view>
+            <view class="box-right">{{nameInfo.secNameMeaning}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="detail-content" wx:if="{{detailInfo.length}}">
       <block wx:for="{{detailInfo}}" wx:for-index="index" wx:for-item="item" wx:key="index">
         <view class="item">
           <view class="item-title">
             <text>{{item.type}}</text>
           </view>
           <view class="item-content">
-            <text>{{item.description}}</text>
+            <view wx:if="{{item.id == '5'}}">
+              <block wx:for="{{wuge}}" wx:for-index="childIndex" wx:for-item="childItem" wx:key="childIndex">
+                <view>{{childItem.type}}</view>
+                <view>{{childItem.meaning}}</view>
+              </block>
+            </view>
+            <text wx:else>{{item.description}}</text>
           </view>
         </view>
       </block>
     </view>
     <view class="bottom-btn">
-      <button plain="true" @tap="collectInfo" wx:if="{{infoDetail.collect_status === 0}}"><i class="iconfont icon-star" />收藏</button>
-      <button plain="true" @tap="unCollectInfo" wx:else><i class="iconfont icon-star-full" />收藏</button>
-      <button plain="true" @tap="share"><i class="iconfont icon-share"/>查看收藏夹</button>
+      <button plain="true" @tap="collectInfo" ><i class="iconfont icon-star" />收藏</button>
+      <!-- <button plain="true" @tap="unCollectInfo"><i class="iconfont icon-star-full" />收藏</button> -->
+      <button plain="true" @tap="share">查看收藏夹</button>
     </view>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  import nameBox from '@/widgets/nameBox'
   import {getDetailName} from '@/utils/api'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '名字详情'
     }
     components = {
-      nameBox
     }
 
     data = {
-      detailInfo: []
+      detailInfo: [],
+      wuge: [],
+      nameInfo: {}
     }
 
     computed = {
@@ -113,6 +260,7 @@
 
     onLoad (options) {
       console.log(options)
+      this.nameInfo = options
       let params = {
         name: options.name,
         score: options.score,
@@ -121,6 +269,7 @@
       getDetailName(params).then((res) => {
         console.log(res)
         this.detailInfo = res.list
+        this.wuge = res.wuge
         this.$apply()
       })
     }

@@ -119,9 +119,6 @@
               </view>
             </view>
             <view class="flex"></view>
-            <view class="btn">
-              <button @tap="toDetail">查看详情</button>
-            </view>
           </view>
           <view class="item-footer">
             <view class="box">

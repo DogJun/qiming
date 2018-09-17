@@ -62,6 +62,13 @@
             background: @primary-color;
           }
         }
+        i {
+          display: inline-block;
+          vertical-align: middle;
+          font-size: 50rpx;
+          margin-right: 10rpx;
+          color: @primary-color;
+        }
         .sex-text {
           vertical-align: middle;
         }
@@ -175,11 +182,13 @@
       <view class="page-form-box">
         <text class="desc" space="emsp">性  别</text>
         <view bindtap="chooseSex" class="sex-box" id="1">
-          <image class="sex-img" :class="{ 'active': sex === '1' }" src="/images/dagou.png"></image>
+          <i class="iconfont {{sex === '1' ? 'icon-check-full' : 'icon-circle'}}"></i>
+          <!-- <image class="sex-img" :class="{ 'active': sex === '1' }" src="/images/dagou.png"></image> -->
           <text class="sex-text">男</text>
         </view>
         <view bindtap="chooseSex" class="sex-box" id="0">
-          <image class="sex-img" :class="{ 'active': sex === '0' }" src="/images/dagou.png"></image>
+          <i class="iconfont {{sex === '0' ? 'icon-check-full' : 'icon-circle'}}"></i>
+          <!-- <image class="sex-img" :class="{ 'active': sex === '0' }" src="/images/dagou.png"></image> -->
           <text class="sex-text">女</text>
         </view>
       </view>
@@ -196,11 +205,11 @@
         />
       </view>
       <view class="page-form-box">
-        <text class="desc">出生时间</text>
+        <text class="desc">出生日期</text>
         <input
           @tap="showCalendar"
           class="value"
-          placeholder="请选择出生时间"
+          placeholder="请选择出生日期"
           value="{{dateText}}"
           placeholder-style="color:#dddddd"
           disabled="true"
@@ -238,18 +247,22 @@
       </view>
     </view>
     <calendar :date.sync="date" :dateType.sync="dateType" :isShow.sync="isShow"></calendar>
+    <tip/>
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
   import calendar from '@/components/calendar'
+  import {getAd} from '@/utils/api'
+  import TipBox from 'spore-wepy-tipbox'
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '首页'
     }
     components = {
-      calendar
+      calendar,
+      tip: TipBox
     }
     data = {
       sex: '1', // 性别 男1 女0
@@ -422,6 +435,9 @@
       dateText () {
         let type = this.dateType === '1' ? '公历' : '农历'
         return this.date ? `${this.date} ${type}` : ''
+      },
+      isActive () {
+        return this.sex && this.surname && this.date && this.region && this.checkText
       }
     }
     methods = {
@@ -456,8 +472,9 @@
             }
           }
         } else {
-          // TODO 提示最多只能选择6个
-          console.log('最多只能选择6个')
+          this.$invoke('tip', 'show', '最多只能选择6个', {
+            position: 'center'
+          })
         }
       },
       // 关闭起名意愿
@@ -475,21 +492,45 @@
       },
       // 立即起名
       submit () {
-        let nameInfo = {
-          surname: this.surname,
-          birthDate: this.date,
-          sex: this.sex,
-          birthAddress: this.region,
-          guoliOrnongli: this.dateType,
-          expectation: this.checkText
+        if (this.isActive) {
+          let nameInfo = {
+            surname: this.surname,
+            birthDate: this.date,
+            sex: this.sex,
+            birthAddress: this.region,
+            guoliOrnongli: this.dateType,
+            expectation: this.checkText
+          }
+          wepy.setStorageSync('NAME_INFO', nameInfo)
+          wepy.navigateTo({
+            url: '/pages/result/index'
+          })
+        } else {
+          if (!this.surname) {
+            this.$invoke('tip', 'show', '请输入姓氏', {
+              position: 'center'
+            })
+          } else if (!this.date) {
+            this.$invoke('tip', 'show', '请选择出生日期', {
+              position: 'center'
+            })
+          } else if (!this.region) {
+            this.$invoke('tip', 'show', '请选择出生地点', {
+              position: 'center'
+            })
+          } else if (!this.checkText) {
+            this.$invoke('tip', 'show', '请选择起名意愿', {
+              position: 'center'
+            })
+          }
         }
-        wepy.setStorageSync('NAME_INFO', nameInfo)
-        wepy.navigateTo({
-          url: '/pages/result/index'
-        })
       }
     }
     events = {}
-    onLoad() {}
+    onLoad () {
+      getAd({type: 1}).then((res) => {
+        console.log(res)
+      })
+    }
   }
 </script>
